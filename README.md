@@ -1,4 +1,4 @@
-# Cortex: A symbol based language this time
+# Cortex: A symbol based language
 
 Cortex is a simple esoteric programming language, inspired by Brain Fuck, written in python. 
 
