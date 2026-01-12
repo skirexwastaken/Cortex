@@ -56,53 +56,80 @@ def cortex():
                     match code[currentToken]:
                         # --- Moves the cell pointer by 1 to the right ---
                         case ">":
-                            currentCell += 1
+                            if currentFlow == 1:
+                                currentCell += 1
 
                         # --- Moves the cell pointer by 1 to the left ---
                         case "<":
-                            currentCell -= 1
+                            if currentFlow == 1:
+                                currentCell -= 1
 
                         # --- Adds the value 1 to the current cell ---
                         case "+":
-                            cell = workspace[currentCell]
+                            if currentFlow == 1:
+                                cell = workspace[currentCell]
 
-                            if cell + 1 > 255:
-                                cell = 0
+                                if cell + 1 > 255:
+                                    cell = 0
 
-                            else:
-                                cell += 1
+                                else:
+                                    cell += 1
 
-                            workspace[currentCell] = cell
+                                workspace[currentCell] = cell
                         
                         # --- Subtracts the value 1 from the current cell ---
                         case "-":
-                            cell = workspace[currentCell]
+                            if currentFlow == 1:
+                                cell = workspace[currentCell]
 
-                            if cell - 1 < 0:
-                                cell = 255
+                                if cell - 1 < 0:
+                                    cell = 255
 
-                            else:
-                                cell -= 1
+                                else:
+                                    cell -= 1
 
-                            workspace[currentCell] = cell
+                                workspace[currentCell] = cell
 
                         # --- Prints the numerical value of the current cell ---
                         case ".":
-                            print(workspace[currentCell])
+                            if currentFlow == 1:
+                                print(workspace[currentCell])
 
                         # --- Prints the ASCII character of the current cell ---
-                        case "*":    
-                            print(chr(workspace[currentCell]))
+                        case "*":
+                            if currentFlow == 1:    
+                                print(chr(workspace[currentCell]))
 
                         # --- Jumps to a token based on the value of the current cell ---
                         case "%":
-                            jumpValue = workspace[currentCell]
+                            if currentFlow == 1:
+                                jumpValue = workspace[currentCell]
 
-                            if jumpValue >= codeLength:
-                                currentToken = jumpValue - codeLength
-                                
-                            else: 
-                                currentToken = jumpValue - 1
+                                if jumpValue >= codeLength:
+                                    currentToken = jumpValue - codeLength
+                                    
+                                else: 
+                                    currentToken = jumpValue - 1
+
+                        # --- Adds the value from user input to the current cell ---
+                        case "/":
+                            if currentFlow == 1:
+                                inputValue = input("$ ")[0]
+
+                                if not inputValue.isnumeric():
+                                    inputValue = ord(inputValue)
+
+                                inputValue = int(inputValue)
+
+                                cell = workspace[currentCell]
+
+                                if cell + inputValue > 255:
+                                    cell = (cell + inputValue) - 255
+
+                                else:
+                                    cell = inputValue
+
+                                workspace[currentCell] = cell
 
                         # --- If > 0 condition — sets currentFlow to 1 if current cell value is greater than 0 ---
                         case "[":
@@ -113,7 +140,6 @@ def cortex():
                         case "]":
                             if workspace[currentCell] > 0:
                                 currentFlow = -1
-                                execute = False
 
                         # --- If == 0 condition — sets currentFlow to 1 if current cell value equals 0 ---
                         case "{":
@@ -124,31 +150,11 @@ def cortex():
                         case "}":
                             if workspace[currentCell] == 0:
                                 currentFlow = -1
-                                execute = False
                         
                         # --- If condition — code inside () is skipped if the current cell value is 0 ---
                         case "(":
                             if workspace[currentCell] == 0:
                                 execute = False
-
-                        # --- Adds the value from user input to the current cell ---
-                        case "/":
-                            inputValue = input("$ ")[0]
-
-                            if not inputValue.isnumeric():
-                                inputValue = ord(inputValue)
-
-                            inputValue = int(inputValue)
-
-                            cell = workspace[currentCell]
-
-                            if cell + inputValue > 255:
-                                cell = (cell + inputValue) - 255
-
-                            else:
-                                cell = inputValue
-
-                            workspace[currentCell] = cell
 
                 else:
                     match code[currentToken]:
